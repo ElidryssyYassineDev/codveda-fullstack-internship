@@ -243,6 +243,17 @@ button:focus-visible {
   outline-offset: 2px;
 }
 
+.form-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn-cancel {
+  background-color: transparent;
+  color: var(--ink-muted);
+  border: 1px solid var(--line);
+}
+
 /* Status message */
 
 .list-header {
