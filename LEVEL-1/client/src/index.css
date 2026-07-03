@@ -1,0 +1,66 @@
+/* client/src/index.css */
+/* Global reset and structural layout only.
+   Full design system (typography, colours, theme) migrated in Milestone 7. */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: sans-serif;
+  min-height: 100vh;
+  background: #f5f5f5;
+}
+
+/* ── Layout ── */
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  padding: 2rem 0;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* ── Navbar ── */
+.navbar {
+  background: #1a1a2e;
+  color: #fff;
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar__title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.navbar__tag {
+  font-size: 0.75rem;
+  opacity: 0.6;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* ── Temporary placeholder ── */
+.placeholder {
+  color: #888;
+  font-style: italic;
+  padding: 2rem;
+  text-align: center;
+  border: 2px dashed #ddd;
+  border-radius: 8px;
+}
