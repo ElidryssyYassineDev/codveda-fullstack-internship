@@ -6,6 +6,7 @@
 import { useState, useEffect } from 'react'
 import ProductCard from './ProductCard'
 import LoadingSpinner from './LoadingSpinner'
+import AddProductForm from './AddProductForm'
 
 function ProductList() {
   const [products, setProducts]   = useState([])     // ← [] not ProductCard
@@ -49,6 +50,16 @@ function ProductList() {
   // [] → run once after first render (mount). Never again.
   // No dependencies means no external values can trigger a re-run.
 
+
+  // ── Callback passed down to AddProductForm ───────────────────────
+  // Defined here because setProducts lives here.
+  // This is "lifting state up" — the child triggers this,
+  // but the state update happens in the owner (ProductList).
+  function handleProductAdded(newProduct) {
+    setProducts([...products, newProduct]) 
+  }
+
+
   // ── Conditional rendering — one state at a time ──────────────────
   // Each return is mutually exclusive. React runs the first one that
   // matches and skips the rest. This is cleaner than nested ternaries.
@@ -66,30 +77,36 @@ function ProductList() {
     )
   }
 
-  if (products.length === 0) {
-    return (
-      <div className="status-message">
-        <p>No products found. Add one to get started.</p>
-      </div>
-    )
-  }
+
 
   // ── Happy path — we have data ─────────────────────────────────────
   return (
     <div className="product-list">
+
+      <AddProductForm onProductAdded={handleProductAdded}/>
+
       <div className="product-list__header">
         <h2 className="product-list__title">Products</h2>
         <span className="product-list__count">{products.length} items</span>
       </div>
+      
+      {products.length === 0 ?
+      (
+        <div className="status-message">
+          <p>No products found. Add one to get started.</p>
+        </div>
+      ) : (
+        <div className="product-grid">
+          {products.map(product => (
+            <ProductCard
+              key={product._id}
+              product={product}
+            />
+          ))}
+        </div>
+      )}
 
-      <div className="product-grid">
-        {products.map(product => (
-          <ProductCard
-            key={product._id}
-            product={product}
-          />
-        ))}
-      </div>
+
     </div>
   )
 }
