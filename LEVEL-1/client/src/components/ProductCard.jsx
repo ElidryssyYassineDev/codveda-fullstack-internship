@@ -5,15 +5,15 @@
 //   onDelete (function, optional) — called when Delete is clicked
 
 function ProductCard ({product, onEdit, onDelete}){
-    const {name, description, price, stock } = product
-    const isOutOfStock = stock === 0
+    const {name, price, description, inStock } = product
+    const isOutOfStock = !inStock;
 
     return (
         <div className={`product-card ${isOutOfStock ? 'product-card--out-of-stock':''}`}>
             <div className="product-card__header">
                 <h3 className="product-card__name">{name}</h3>
                 <span className={`product-card__stock-badge ${isOutOfStock ? 'badge--out': 'badge--in'}`}>
-                    {isOutOfStock ? 'Out of Stock' : `${stock} in stock`}
+                    {isOutOfStock ? 'Out of Stock' : `In stock`}
                 </span>
             </div>
 
