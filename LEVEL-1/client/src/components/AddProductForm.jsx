@@ -22,7 +22,14 @@ function AddProductForm({onProductAdded}){
   // ── Submit handler ───────────────────────────────────────────────
   async function handleSubmit(e){
     e.preventDefault();    //prevent default reload on submit
-    setError(null);        //clear any previous error 
+    if(!name.trim()){
+      setError('Product name cannot be emty.')
+      return //bail out before fetch
+    }
+    if(Number(price) < 0){
+      setError('Price cannot be negative.')
+      return
+    }
     setIsSubmitting(true); //disable button while request is in flight  
 
     try {
