@@ -315,3 +315,15 @@ body {
   font-size: 0.85rem;
   margin-bottom: 1rem;
 }
+
+/* ── ProductCard edit mode ── */
+.product-card--editing {
+  border-color: #f59e0b;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
+}
+
+.product-card--editing .product-card__actions {
+  margin-top: 0.75rem;
+  display: flex;
+  gap: 0.5rem;
+}
