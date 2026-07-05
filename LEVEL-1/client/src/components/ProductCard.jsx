@@ -17,10 +17,11 @@ function ProductCard({ product, onEdit, onDelete }) {
   // ── Edit field state — pre-filled with current product values ─────
   // Q3 answer: initial values are the product's actual current values,
   // not empty strings. User sees what they're editing.
-  const [editName, setEditName]             = useState(name)
-  const [editPrice, setEditPrice]           = useState(price)
-  const [editDescription, setEditDescription] = useState(description)
-  const [editInStock, setEditInStock]       = useState(inStock)
+  const [editForm, setEditForm]= useState({name, price, description, inStock})
+  // Update a single field without touching others
+  function handleFieldChange(field, value){
+    setEditForm(prev =>({...prev, [field]:value}))
+  }
 
   // ── Edit submit handler ───────────────────────────────────────────
   async function handleSubmitEdit(e) {
@@ -43,6 +44,12 @@ function ProductCard({ product, onEdit, onDelete }) {
     if (success) setIsEditing(false)
   }
 
+  function handleDeleteClick() {
+  if (window.confirm(`Delete "${name}"? This cannot be undone.`)) {
+    onDelete(_id)
+  }
+}
+
   // ── Edit mode render ──────────────────────────────────────────────
   if (isEditing) {
     return (
@@ -58,7 +65,7 @@ function ProductCard({ product, onEdit, onDelete }) {
               type="text"
               className="form__input"
               value={editName}
-              onChange={e => setEditName(e.target.value)}
+              onChange={e => handleFieldChange(e.target.value)}
               required
             />
           </div>
@@ -70,7 +77,7 @@ function ProductCard({ product, onEdit, onDelete }) {
               type="number"
               className="form__input"
               value={editPrice}
-              onChange={e => setEditPrice(e.target.value)}
+              onChange={e => handleFieldChange(e.target.value)}
               min="0"
               step="0.01"
               required
@@ -83,7 +90,7 @@ function ProductCard({ product, onEdit, onDelete }) {
               id={`desc-${_id}`}
               className="form__input form__textarea"
               value={editDescription}
-              onChange={e => setEditDescription(e.target.value)}
+              onChange={e => handleFieldChange(e.target.value)}
               rows={2}
             />
           </div>
@@ -94,7 +101,7 @@ function ProductCard({ product, onEdit, onDelete }) {
               type="checkbox"
               className="form__checkbox"
               checked={editInStock}
-              onChange={e => setEditInStock(e.target.checked)}
+              onChange={e => handleFieldChange(e.target.checked)}
             />
             <label className="form__label" htmlFor={`stock-${_id}`}>In Stock</label>
           </div>
@@ -151,7 +158,7 @@ function ProductCard({ product, onEdit, onDelete }) {
           </button>
           <button
             className="btn btn--danger"
-            onClick={() => onDelete(_id)}
+            onClick={handleDeleteClick}
           >
             Delete
           </button>
