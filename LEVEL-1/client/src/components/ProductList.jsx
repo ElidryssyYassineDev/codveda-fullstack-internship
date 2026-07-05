@@ -28,7 +28,7 @@ function ProductList() {
   }, [])
 
   function handleProductAdded(newProduct) {
-    setProducts([...products, newProduct])
+    setProducts(current =>[...current, newProduct])
   }
 
   // ── Delete handler ────────────────────────────────────────────────
@@ -36,15 +36,16 @@ function ProductList() {
   // Makes the DELETE request, then filters it out of state on success.
   async function handleDelete(productId) {
     try {
+      
       const res = await fetch(`/api/products/${productId}`, {
         method: 'DELETE',
       })
-
+      
       if (!res.ok) throw new Error(`Server error ${res.status}`)
 
       // .filter() returns a new array excluding the deleted product.
       // React detects the new array reference and re-renders.
-      setProducts(products.filter(p => p._id !== productId))
+      setProducts(current =>current.filter(p => p._id !== productId))
       setDeleteError(null)
 
     } catch (err) {
@@ -74,15 +75,17 @@ function ProductList() {
       // For the one whose _id matches: replace it with the updated version.
       // For all others: return them unchanged.
       // Result is a new array — React re-renders.
-      setProducts(products.map(p =>
+      setProducts(current =>current.map(p =>
         p._id === productId ? responseData.data : p
       ))
 
-      return true   // signal success to ProductCard
+      const succeeded = true
+
+      return succeeded   // signal success to ProductCard
 
     } catch (err) {
       console.error('Update failed:', err.message)
-      return false  // signal failure — ProductCard keeps form open
+      return (!succeeded)  // signal failure — ProductCard keeps form open
     }
   }
 
