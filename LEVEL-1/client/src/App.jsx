@@ -2,7 +2,7 @@
 // Now owns isDarkMode state — the only piece of state that
 // belongs at the application level rather than inside a feature component.
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Navbar from './components/Navbar'
 import ProductList from './components/ProductList'
 
@@ -18,15 +18,13 @@ function App() {
   )
 
   function toggleTheme() {
-    setIsDarkMode(prev => {
-      const next = !prev
-      // Write to localStorage inside the functional update —
-      // this guarantees next is always the correct new value,
-      // never a stale closure over isDarkMode.
-      localStorage.setItem('theme', next ? 'dark' : 'light')
-      return next
-  })
+    setIsDarkMode(prev => !prev)
   }
+  // useEffect reacts to isDarkMode changes and syncs to localStorage
+  useEffect(()=>{
+    localStorage.setItem('theme', isDarkMode ? 'dark' : 'light')
+  }, [isDarkMode])
+
 
   return (
     <div className="app" data-theme={isDarkMode ? 'dark' : 'light'}>
