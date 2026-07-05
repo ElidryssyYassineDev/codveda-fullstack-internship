@@ -9,6 +9,7 @@ function ProductList() {
   const [products, setProducts]   = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError]         = useState(null)
+  const [deleteError, setDeleteError]         = useState(null)
 
   useEffect(() => {
     async function fetchProducts() {
@@ -44,9 +45,10 @@ function ProductList() {
       // .filter() returns a new array excluding the deleted product.
       // React detects the new array reference and re-renders.
       setProducts(products.filter(p => p._id !== productId))
+      setDeleteError(null)
 
     } catch (err) {
-      console.error('Delete failed:', err.message)
+      setDeleteError('Could not delete product. Check your connection and try again!')
       // Could set an error state here — keeping it simple for now.
     }
   }
@@ -97,6 +99,13 @@ function ProductList() {
   return (
     <div className="product-list">
       <AddProductForm onProductAdded={handleProductAdded} />
+
+      {/* ← NEW: delete error renders here, above the grid, dismisses on next successful delete */}
+      {deleteError && (
+        <div className="status-message status-message--error" style={{ marginBottom: '1rem' }}>
+          {deleteError}
+        </div>
+      )}
 
       <div className="product-list__header">
         <h2 className="product-list__title">Products</h2>
