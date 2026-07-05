@@ -7,13 +7,25 @@ import Navbar from './components/Navbar'
 import ProductList from './components/ProductList'
 
 function App() {
-  const [isDarkMode, setIsDarkMode] = useState(false)
+  const [isDarkMode, setIsDarkMode] = useState(
+    () => localStorage.getItem('theme') === 'dark'
+    // The () => makes this a LAZY INITIALIZER.
+    // React runs this function once on mount — not on every render.
+    // localStorage.getItem('theme') returns:
+    //   null    → if key doesn't exist yet → null === 'dark' → false (light mode)
+    //   'dark'  → 'dark' === 'dark' → true (dark mode)
+    //   'light' → 'light' === 'dark' → false (light mode)
+  )
 
   function toggleTheme() {
-    setIsDarkMode(prev => !prev)
-    // Using the functional update form: prev => !prev
-    // instead of !isDarkMode — safer when React batches
-    // multiple state updates together.
+    setIsDarkMode(prev => {
+      const next = !prev
+      // Write to localStorage inside the functional update —
+      // this guarantees next is always the correct new value,
+      // never a stale closure over isDarkMode.
+      localStorage.setItem('theme', next ? 'dark' : 'light')
+      return next
+  })
   }
 
   return (
