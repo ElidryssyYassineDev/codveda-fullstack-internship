@@ -1,4 +1,3 @@
-// client/src/components/ProductCard.jsx
 // Purpose: Displays one product. Toggles between display and edit mode.
 // Props:
 //   product  (object)   — the product data
@@ -6,8 +5,10 @@
 //   onDelete (function) — receives (productId)
 
 import { useState } from 'react'
+import { useAuth } from '../context/AuthContext'
 
 function ProductCard({ product, onEdit, onDelete }) {
+  const { isAdmin } = useAuth()
   const { _id, name, description, price, inStock } = product
 
   // ── Local UI state — only this card cares about these ─────────────
@@ -64,7 +65,7 @@ function ProductCard({ product, onEdit, onDelete }) {
               // when multiple cards are in edit mode simultaneously
               type="text"
               className="form__input"
-              value={editName}
+              value={editForm.name}
               onChange={e => handleFieldChange(e.target.value)}
               required
             />
@@ -76,7 +77,7 @@ function ProductCard({ product, onEdit, onDelete }) {
               id={`price-${_id}`}
               type="number"
               className="form__input"
-              value={editPrice}
+              value={editForm.price}
               onChange={e => handleFieldChange(e.target.value)}
               min="0"
               step="0.01"
@@ -89,7 +90,7 @@ function ProductCard({ product, onEdit, onDelete }) {
             <textarea
               id={`desc-${_id}`}
               className="form__input form__textarea"
-              value={editDescription}
+              value={editForm.description}
               onChange={e => handleFieldChange(e.target.value)}
               rows={2}
             />
@@ -100,7 +101,7 @@ function ProductCard({ product, onEdit, onDelete }) {
               id={`stock-${_id}`}
               type="checkbox"
               className="form__checkbox"
-              checked={editInStock}
+              checked={editForm.inStock}
               onChange={e => handleFieldChange(e.target.checked)}
             />
             <label className="form__label" htmlFor={`stock-${_id}`}>In Stock</label>
@@ -149,7 +150,7 @@ function ProductCard({ product, onEdit, onDelete }) {
       <div className="product-card__footer">
         <span className="product-card__price">${price.toFixed(2)}</span>
 
-        <div className="product-card__actions">
+       {isAdmin && <div className="product-card__actions">
           <button
             className="btn btn--secondary"
             onClick={() => setIsEditing(true)}
@@ -162,7 +163,7 @@ function ProductCard({ product, onEdit, onDelete }) {
           >
             Delete
           </button>
-        </div>
+        </div>}
       </div>
 
     </div>
