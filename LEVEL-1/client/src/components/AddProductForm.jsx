@@ -1,15 +1,20 @@
 // Purpose: Controlled form for creating a new product.
 // Props:
-//   onProductAdded (function, required) — called with the new product
-//                   object after a successful POST. Defined in ProductList,
-//                   passed down as a prop. This is the "lifting state up" pattern.
+//      onProductAdded (function, required) — called with the new product
+//      object after a successful POST. Defined in ProductList,
+//      passed down as a prop. This is the "lifting state up" pattern.
 
 
 import { useState } from "react";
+import { useAuth } from "../context/AuthContext"
+import { authHeaders } from "../utils/authHeaders";
+
 
 function AddProductForm({onProductAdded}){
   // ── Form field state ─────────────────────────────────────────────
   // Each input is controlled — React owns the value at all times.
+
+  const { token } = useAuth();
   const [name, setName] = useState('');
   const [price, setPrice] = useState('');
   const [description, setDescription] = useState('');
@@ -35,11 +40,7 @@ function AddProductForm({onProductAdded}){
     try {
         const res = await fetch('/api/products', {
             method:'Post',
-            headers:{
-                'Content-Type': 'application/json',
-                // Tells Express the body is JSON, not a form submission.
-          // Without this header, req.body would be undefined.
-            },
+            headers: authHeaders(token),
             body : JSON.stringify(
                 {name,
                 price : Number(price),
