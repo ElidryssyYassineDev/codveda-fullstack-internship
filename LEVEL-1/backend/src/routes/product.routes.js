@@ -1,22 +1,27 @@
 const express = require('express');
-const router = express.Router();
-const { 
-    createProduct,
-    getProducts,
-    getProductById,
-    updateProduct,
-    deleteProduct,
-     } = require('../controllers/product.controller');
+const router  = express.Router();
 
-const validateObjectId = require('../middlewares/validateObjectId');
+const {
+  createProduct,
+  getProducts,
+  getProductById,
+  updateProduct,
+  deleteProduct,
+} = require('../controllers/product.controller');
 
-router.route('/').post(createProduct).get(getProducts);
+const validateObjectId         = require('../middlewares/validateObjectId');
+const { protect, adminOnly }   = require('../middlewares/auth.middleware');
 
-router
-     .route('/:id')
-     .get(validateObjectId, getProductById)
-     .put(validateObjectId, updateProduct)
-     .patch(validateObjectId, updateProduct)
-     .delete(validateObjectId, deleteProduct);
+// ── Public routes ─────────────────────────────────────────────────────
+// No token required — anyone can read products
+router.get('/',    getProducts);
+router.get('/:id', validateObjectId, getProductById);
+
+// ── Protected + admin-only routes ─────────────────────────────────────
+// Token required AND role must be admin
+router.post('/',    protect, adminOnly, createProduct);
+router.put('/:id',  validateObjectId, protect, adminOnly, updateProduct);
+router.patch('/:id',validateObjectId, protect, adminOnly, updateProduct);
+router.delete('/:id',validateObjectId, protect, adminOnly, deleteProduct);
 
 module.exports = router;
