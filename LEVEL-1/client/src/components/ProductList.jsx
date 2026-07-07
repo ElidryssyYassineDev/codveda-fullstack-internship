@@ -4,12 +4,15 @@ import { useState, useEffect } from 'react'
 import ProductCard from './ProductCard'
 import LoadingSpinner from './LoadingSpinner'
 import AddProductForm from './AddProductForm'
+import { useAuth } from '../context/AuthContext'
+import { authHeaders } from '../utils/authHeaders'
 
 function ProductList() {
-  const [products, setProducts]   = useState([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError]         = useState(null)
-  const [deleteError, setDeleteError]         = useState(null)
+  const { token, isAdmin } = useAuth()
+  const [products, setProducts]       = useState([])
+  const [isLoading, setIsLoading]     = useState(true)
+  const [error, setError]             = useState(null)
+  const [deleteError, setDeleteError] = useState(null)
 
   useEffect(() => {
     async function fetchProducts() {
@@ -39,6 +42,7 @@ function ProductList() {
       
       const res = await fetch(`/api/products/${productId}`, {
         method: 'DELETE',
+        headers: authHeaders(token),
       })
       
       if (!res.ok) throw new Error(`Server error ${res.status}`)
@@ -63,7 +67,7 @@ function ProductList() {
     try {
       const res = await fetch(`/api/products/${productId}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: authHeaders(token),
         body: JSON.stringify(updatedData),
       })
 
@@ -101,7 +105,7 @@ function ProductList() {
 
   return (
     <div className="product-list">
-      <AddProductForm onProductAdded={handleProductAdded} />
+      {isAdmin && <AddProductForm onProductAdded={handleProductAdded} />}
 
       {/* ← NEW: delete error renders here, above the grid, dismisses on next successful delete */}
       {deleteError && (
