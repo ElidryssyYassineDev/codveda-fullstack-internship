@@ -460,3 +460,46 @@ body {
   color: var(--color-text-muted);
   letter-spacing: 0.04em;
 }
+
+/* ── Auth page wrapper ── */
+.auth-page {
+  max-width: 400px;
+  margin: 0 auto 2.5rem;
+}
+
+.auth-toggle {
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.auth-toggle button {
+  background: none;
+  border: none;
+  color: var(--color-accent);
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  font-size: inherit;
+  padding: 0;
+}
+
+/* ── Navbar user info ── */
+.navbar__user {
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.navbar__role-badge {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+  padding: 0.15rem 0.4rem;
+  border-radius: 999px;
+  letter-spacing: 0.04em;
+}
