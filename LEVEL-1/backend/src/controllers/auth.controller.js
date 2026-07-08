@@ -48,8 +48,17 @@ const signup = AsyncHandler(async (req, res) => {
 
   // Create user — password is hashed by the pre-save hook in the model.
   // The controller never sees or touches the plain password after this line.
-  const user = await User.create({ name, email, password })
-
+  
+  let user 
+  try {
+    user = await User.create({ name, email, password })
+  }catch(err){
+    if(err.code === 11000){
+      throw new ApiError(400, 'An account with this email already exists')
+    }
+    throw err
+  }
+  
   const token = signToken(user)
 
   res.status(201).json({
@@ -93,7 +102,7 @@ const login = AsyncHandler(async (req, res) => {
 const getMe = AsyncHandler(async (req, res) => {
   res.status(200).json({
     success: true,
-    data: req.user,
+    data: userResponse(req.user),
   })
 })
 
