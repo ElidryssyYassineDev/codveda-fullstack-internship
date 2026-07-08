@@ -6,9 +6,10 @@
 
 import { useState } from 'react'
 import { useAuth } from '../context/AuthContext'
+import { useEffect } from 'react'
 
 function ProductCard({ product, onEdit, onDelete }) {
-  const { isAdmin } = useAuth()
+  const { isAdmin, currentUser } = useAuth()
   const { _id, name, description, price, inStock } = product
 
   // ── Local UI state — only this card cares about these ─────────────
@@ -23,6 +24,15 @@ function ProductCard({ product, onEdit, onDelete }) {
   function handleFieldChange(field, value){
     setEditForm(prev =>({...prev, [field]:value}))
   }
+
+  // ── Reset edit state whenever the logged-in identity changes ──────
+  // currentUser changes on login AND logout (it becomes null on logout,
+  // then a new object on the next login). Either transition means
+  // "a different person is now looking at this screen" — any in-progress
+  // edit belonged to whoever was here before and must not carry over.
+  useEffect(()=>{
+    setIsEditing(false)
+  },[currentUser])
 
   // ── Edit submit handler ───────────────────────────────────────────
   async function handleSubmitEdit(e) {
