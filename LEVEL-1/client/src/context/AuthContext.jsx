@@ -21,8 +21,13 @@ export function AuthProvider ({children}){
 
     const [currentUser, setCurrentUser] = useState(
         () => {
+          try{
             const stored = localStorage.getItem('user')
             return stored ? JSON.parse(stored) : null
+          }catch{
+            // Corrupted localStorage -- fail safe instead of crashing the app
+            return null
+          }
         }
         //same pattern - persists user object across refreshes.
     )
