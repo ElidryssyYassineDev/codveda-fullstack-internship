@@ -8,7 +8,7 @@ import { useAuth } from '../context/AuthContext'
 import { authHeaders } from '../utils/authHeaders'
 
 function ProductList() {
-  const { token, isAdmin } = useAuth()
+  const { token, isAdmin, logout } = useAuth()
   const [products, setProducts]       = useState([])
   const [isLoading, setIsLoading]     = useState(true)
   const [error, setError]             = useState(null)
@@ -44,6 +44,11 @@ function ProductList() {
         method: 'DELETE',
         headers: authHeaders(token),
       })
+
+      if(res.status === 401) {
+        logout()
+        return
+      }
       
       if (!res.ok) throw new Error(`Server error ${res.status}`)
 
@@ -71,6 +76,11 @@ function ProductList() {
         body: JSON.stringify(updatedData),
       })
 
+      if(res.status === 401){
+        logout()
+        return false
+      }
+
       if (!res.ok) throw new Error(`Server error ${res.status}`)
 
       const responseData = await res.json()
@@ -88,7 +98,6 @@ function ProductList() {
       return succeeded   // signal success to ProductCard
 
     } catch (err) {
-      console.error('Update failed:', err.message)
       return (!succeeded)  // signal failure — ProductCard keeps form open
     }
   }
