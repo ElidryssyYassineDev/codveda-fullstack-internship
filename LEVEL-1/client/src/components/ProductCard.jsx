@@ -42,10 +42,10 @@ function ProductCard({ product, onEdit, onDelete }) {
     // onEdit is async — it returns a Promise that resolves to true/false.
     // We await it so we know whether the server accepted the update.
     const success = await onEdit(_id, {
-      name: editName,
-      price: Number(editPrice),   // convert string input back to number
-      description: editDescription,
-      inStock: editInStock,
+      name: editForm.name,
+      price: Number(editForm.price),   // convert string input back to number
+      description: editForm.description,
+      inStock: editForm.inStock,
     })
 
     setIsSubmitting(false)
@@ -76,7 +76,7 @@ function ProductCard({ product, onEdit, onDelete }) {
               type="text"
               className="form__input"
               value={editForm.name}
-              onChange={e => handleFieldChange(e.target.value)}
+              onChange={e => handleFieldChange('name', e.target.value)}
               required
             />
           </div>
@@ -88,7 +88,7 @@ function ProductCard({ product, onEdit, onDelete }) {
               type="number"
               className="form__input"
               value={editForm.price}
-              onChange={e => handleFieldChange(e.target.value)}
+              onChange={e => handleFieldChange('price', e.target.value)}
               min="0"
               step="0.01"
               required
@@ -101,7 +101,7 @@ function ProductCard({ product, onEdit, onDelete }) {
               id={`desc-${_id}`}
               className="form__input form__textarea"
               value={editForm.description}
-              onChange={e => handleFieldChange(e.target.value)}
+              onChange={e => handleFieldChange('description', e.target.value)}
               rows={2}
             />
           </div>
@@ -112,7 +112,7 @@ function ProductCard({ product, onEdit, onDelete }) {
               type="checkbox"
               className="form__checkbox"
               checked={editForm.inStock}
-              onChange={e => handleFieldChange(e.target.checked)}
+              onChange={e => handleFieldChange('inStock', e.target.checked)}
             />
             <label className="form__label" htmlFor={`stock-${_id}`}>In Stock</label>
           </div>
