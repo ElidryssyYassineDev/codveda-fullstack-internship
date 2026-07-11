@@ -21,8 +21,14 @@ const productSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    }
   },
   { timestamps: true }
 );
+
+productSchema.index({createdBy: 1});
 
 module.exports = mongoose.model('Product', productSchema);
