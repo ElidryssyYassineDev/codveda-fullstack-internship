@@ -11,7 +11,13 @@ exports.createProduct = asyncHandler(async (req, res) => {
     throw new ApiError(400, 'Name and price are required fields');
   }
 
-  const product = await Product.create({ name, price, description, inStock });
+  const product = await Product.create({ 
+    name, 
+    price, 
+    description, 
+    inStock,
+    createdBy: req.user._id,
+   });
 
   res.status(201).json({
     success: true,
@@ -22,7 +28,7 @@ exports.createProduct = asyncHandler(async (req, res) => {
 // @desc    Get all products
 // @route   GET /api/products
 exports.getProducts = asyncHandler(async (req, res) => {
-  const products = await Product.find();
+  const products = await Product.find().populate('createdBy', 'name email role');
 
   res.status(200).json({
     success: true,
@@ -34,7 +40,7 @@ exports.getProducts = asyncHandler(async (req, res) => {
 // @desc    Get a single product by ID
 // @route   GET /api/products/:id
 exports.getProductById = asyncHandler(async (req, res) => {
-  const product = await Product.findById(req.params.id);
+  const product = await Product.findById(req.params.id).populate('createdBy', 'name email role');
 
   if (!product) {
     throw new ApiError(404, 'Product not found');
