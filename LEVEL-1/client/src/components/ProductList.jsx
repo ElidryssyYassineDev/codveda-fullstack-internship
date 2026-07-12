@@ -38,6 +38,7 @@ function ProductList() {
   // nobody's logged in — this just skips subscribing to nothing.
 
   function handleProductCreated(newProduct) {
+    console.log('handleProductCreated fired successfully!!')
     setProducts(current => {
       // io.emit reaches everyone, including the creator — whose own
       // AddProductForm already added this via the POST response.
