@@ -6,9 +6,11 @@ import LoadingSpinner from './LoadingSpinner'
 import AddProductForm from './AddProductForm'
 import { useAuth } from '../context/AuthContext'
 import { authHeaders } from '../utils/authHeaders'
+import { useSocket } from '../context/SocketContext'
 
 function ProductList() {
   const { token, isAdmin, logout } = useAuth()
+  const { socket } = useSocket()
   const [products, setProducts]       = useState([])
   const [isLoading, setIsLoading]     = useState(true)
   const [error, setError]             = useState(null)
@@ -29,6 +31,49 @@ function ProductList() {
     }
     fetchProducts()
   }, [])
+
+  useEffect(() => {
+  if (!socket) return
+  // socket is null until SocketContext finishes connecting, or if
+  // nobody's logged in — this just skips subscribing to nothing.
+
+  function handleProductCreated(newProduct) {
+    setProducts(current => {
+      // io.emit reaches everyone, including the creator — whose own
+      // AddProductForm already added this via the POST response.
+      // Without this check, it would appear twice in their own list.
+      const alreadyExists = current.some(p => p._id === newProduct._id)
+      if (alreadyExists) return current
+      return [...current, newProduct]
+    })
+  }
+
+  function handleProductUpdated(updatedProduct) {
+    setProducts(current =>
+      current.map(p => p._id === updatedProduct._id ? updatedProduct : p)
+    )
+    // Naturally safe to receive twice — replacing an item with data
+    // it already has changes nothing, unlike create.
+  }
+
+  function handleProductDeleted(deletedId) {
+    setProducts(current => current.filter(p => p._id !== deletedId))
+    // Same — filtering out an already-removed id is a no-op.
+  }
+
+  socket.on('productCreated', handleProductCreated)
+  socket.on('productUpdated', handleProductUpdated)
+  socket.on('productDeleted', handleProductDeleted)
+
+  // Cleanup — the Phase 2 lesson, now load-bearing. Without this,
+  // logging out and back in would leave the OLD socket's listeners
+  // attached here, stacking a second set on top of the new connection's.
+  return () => {
+    socket.off('productCreated', handleProductCreated)
+    socket.off('productUpdated', handleProductUpdated)
+    socket.off('productDeleted', handleProductDeleted)
+  }
+}, [socket])
 
   function handleProductAdded(newProduct) {
     setProducts(current =>[...current, newProduct])
