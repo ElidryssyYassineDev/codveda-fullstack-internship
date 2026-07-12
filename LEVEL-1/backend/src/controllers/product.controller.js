@@ -70,6 +70,9 @@ exports.updateProduct = asyncHandler(async (req, res) => {
     throw new ApiError(404, 'Product not found');
   }
 
+  const io = req.app.get('io');
+  io.emit('productUpdated', product);
+
   res.status(200).json({
     success: true,
     data: product,
@@ -84,6 +87,9 @@ exports.deleteProduct = asyncHandler(async (req, res) => {
   if (!product) {
     throw new ApiError(404, 'Product not found');
   }
+
+  const io = req.app.get('io');
+  io.emit('productDeleted', product._id);
 
   res.status(200).json({
     success: true,
