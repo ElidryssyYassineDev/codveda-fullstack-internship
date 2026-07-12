@@ -33,6 +33,8 @@ export function SocketProvider({ children }) {
     })
 
     setSocket(newSocket)
+    newSocket.on('connect', () => console.log('Socket connected:', newSocket.id))
+    newSocket.on('disconnect', () => console.log('Socket disconnected'))
 
     // This returned function is the cleanup. React runs it right
     // before this effect fires again — which happens the instant
