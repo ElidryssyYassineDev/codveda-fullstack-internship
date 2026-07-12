@@ -58,7 +58,13 @@ function initSocket(httpServer, app) {
 
   io.on('connection', (socket) => {
     console.log(`Socket connected: ${socket.id} (user: ${socket.user.name})`);
+    // Admins get room-targeted notifications (low-stock alerts, below);
+    // regular users are never added to this room, so io.to('admins')
+    // reaches only sockets that passed this exact check at connect time.
 
+    if (socket.user.role === 'admin') {
+      socket.join('admins');
+    }
     socket.on('disconnect', () => {
       console.log(`Socket disconnected: ${socket.id}`);
     });
