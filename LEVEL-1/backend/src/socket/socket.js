@@ -7,13 +7,15 @@ const { Server } = require('socket.io');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user.model');
 
-function initSocket(httpServer) {
+function initSocket(httpServer, app) {
   console.log('[socket.js] initSocket is running')
   const io = new Server(httpServer, {
     cors: {
       origin: '*', // dev only — same permissiveness as app.use(cors()) in app.js
     },
   });
+
+  app.set('io', io);
 
   // ── Auth middleware — runs ONCE per connection attempt, before
   // 'connection' fires. This is the Phase 2 handshake diagram in code.
