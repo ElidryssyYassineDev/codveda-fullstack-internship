@@ -5,6 +5,7 @@ import Navbar from './components/Navbar'
 import ProductList from './components/ProductList'
 import AuthForms from './components/AuthForms'
 import { useAuth } from './context/AuthContext'
+import LowStockAlert from './components/LowStockAlert'
 
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(
@@ -23,6 +24,7 @@ function App() {
   return (
     <div className="app" data-theme={isDarkMode ? 'dark' : 'light'}>
       <Navbar isDarkMode={isDarkMode} onThemeToggle={toggleTheme} />
+      <LowStockAlert/>
 
       <main className="main-content">
         <div className="container">
