@@ -19,6 +19,9 @@ exports.createProduct = asyncHandler(async (req, res) => {
     createdBy: req.user._id,
    });
 
+   const io = req.app.get('io');
+   io.emit('productCreated', product);
+
   res.status(201).json({
     success: true,
     data: product,
