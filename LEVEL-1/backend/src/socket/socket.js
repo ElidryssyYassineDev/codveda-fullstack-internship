@@ -8,7 +8,6 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/user.model');
 
 function initSocket(httpServer, app) {
-  console.log('[socket.js] initSocket is running')
   const io = new Server(httpServer, {
     cors: {
       origin: '*', // dev only — same permissiveness as app.use(cors()) in app.js
