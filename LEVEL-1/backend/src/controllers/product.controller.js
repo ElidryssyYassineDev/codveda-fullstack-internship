@@ -18,6 +18,8 @@ exports.createProduct = asyncHandler(async (req, res) => {
     inStock,
     createdBy: req.user._id,
    });
+   await product.populate('createdBy', 'name email role');
+
 
    const io = req.app.get('io');
    io.emit('productCreated', product);
@@ -72,10 +74,12 @@ exports.updateProduct = asyncHandler(async (req, res) => {
     { name, price, description, inStock },
     { new: true, runValidators: true, omitUndefined: true }
   );
-
+  
   if (!product) {
     throw new ApiError(404, 'Product not found');
   }
+  
+  await product.populate('createdBy', 'name email role');
 
   const io = req.app.get('io');
   io.emit('productUpdated', product);
