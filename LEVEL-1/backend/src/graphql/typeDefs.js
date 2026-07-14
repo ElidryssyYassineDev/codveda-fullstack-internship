@@ -26,6 +26,12 @@ const typeDefs = `#graphql
     products: [Product!]!
     product(id: ID!): Product
   }
+
+  type Mutation {
+    createProduct(name: String!, price: Float!, description: String, inStock: Boolean): Product!
+    updateProduct(id: ID!, name: String, price: Float, description: String, inStock: Boolean): Product!
+    deleteProduct(id: ID!): Product!
+  }
 `;
 
 module.exports = typeDefs;
