@@ -106,4 +106,4 @@ const getMe = AsyncHandler(async (req, res) => {
   })
 })
 
-module.exports = { signup, login, getMe }
+module.exports = { signup, login, getMe, signToken }
