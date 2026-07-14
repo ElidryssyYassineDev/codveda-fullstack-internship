@@ -1,8 +1,3 @@
-// backend/src/graphql/typeDefs.js
-// Purpose: SDL schema. Full Product/User shape as agreed in Phase 3 —
-// but this milestone only wires resolvers for Query.products and
-// Query.product. Mutation type and AuthPayload arrive starting Milestone 3.
-
 const typeDefs = `#graphql
   type User {
     id: ID!
@@ -22,6 +17,11 @@ const typeDefs = `#graphql
     updatedAt: String
   }
 
+  type AuthPayload {
+    token: String!
+    user: User!
+  }
+
   type Query {
     products: [Product!]!
     product(id: ID!): Product
@@ -31,6 +31,9 @@ const typeDefs = `#graphql
     createProduct(name: String!, price: Float!, description: String, inStock: Boolean): Product!
     updateProduct(id: ID!, name: String, price: Float, description: String, inStock: Boolean): Product!
     deleteProduct(id: ID!): Product!
+
+    signup(name: String!, email: String!, password: String!): AuthPayload!
+    login(email: String!, password: String!): AuthPayload!
   }
 `;
 
