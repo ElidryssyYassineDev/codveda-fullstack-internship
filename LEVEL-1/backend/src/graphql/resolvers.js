@@ -4,6 +4,7 @@
 // new way in.
 
 const Product = require('../models/product.model');
+const User = require('../models/user.model');
 
 const resolvers = {
   Query: {
@@ -40,6 +41,13 @@ const resolvers = {
     // No `id` resolver needed at all: Mongoose documents carry a
     // built-in virtual `id` getter (a string version of `_id`) by
     // default, so `product.id` already resolves correctly on its own.
+
+    createdBy: async (parent) => {
+      if(!parent.createdBy) return null;
+
+
+      return await User.findById(parent.createdBy);
+    }
   },
 };
 
