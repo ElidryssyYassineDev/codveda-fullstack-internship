@@ -1,53 +1,79 @@
 // backend/src/graphql/resolvers.js
-// Purpose: Query resolvers only, this milestone. Same Mongoose models
-// your REST controllers already use — no new database layer, just a
-// new way in.
 
+const { GraphQLError } = require('graphql');
 const Product = require('../models/product.model');
 const User = require('../models/user.model');
+const { requireAdmin } = require('./auth');
 
 const resolvers = {
   Query: {
     products: async () => {
       return await Product.find();
-      // Identical call to REST's getProducts. This resolver has no
-      // idea whether the client's query asked for one field or ten —
-      // Apollo strips whatever wasn't requested, AFTER this returns
-      // (Phase 2, Q4).
+    },
+    product: async (parent, args) => {
+      return await Product.findById(args.id);
+    },
+  },
+
+  Mutation: {
+    createProduct: async (parent, args, context) => {
+      const user = requireAdmin(context);
+      // createdBy set from the AUTHENTICATED user, never from args —
+      // and there's no createdBy field in the schema's createProduct
+      // arguments at all, so there's structurally nothing for a
+      // client to even attempt to fake here. Stricter than REST's
+      // req.body, which can carry arbitrary extra keys the controller
+      // has to deliberately filter out via destructuring.
+      return await Product.create({ ...args, createdBy: user._id });
     },
 
-    product: async (parent, args) => {
-      // args carries whatever the client's query passed — here, { id }.
-      return await Product.findById(args.id);
-      // Returns null if not found. Nullable field resolving to null
-      // is valid GraphQL — no manual 404 needed, unlike REST.
+    updateProduct: async (parent, args, context) => {
+      requireAdmin(context);
+
+      const { id, ...updates } = args;
+      // Unlike REST's req.body, GraphQL never sends "undefined" for
+      // an argument the client omitted — an omitted optional argument
+      // simply isn't a key on `args` at all. So `updates` only ever
+      // contains fields the client actually included — no equivalent
+      // of REST's omitUndefined option needed here.
+
+      const product = await Product.findByIdAndUpdate(id, updates, {
+        new: true,
+        runValidators: true,
+      });
+
+      if (!product) {
+        throw new GraphQLError('Product not found', {
+          extensions: { code: 'NOT_FOUND' },
+        });
+      }
+
+      return product;
+    },
+
+    deleteProduct: async (parent, args, context) => {
+      requireAdmin(context);
+
+      const product = await Product.findByIdAndDelete(args.id);
+
+      if (!product) {
+        throw new GraphQLError('Product not found', {
+          extensions: { code: 'NOT_FOUND' },
+        });
+      }
+
+      return product;
     },
   },
 
   Product: {
-    // Explicit field resolvers — only needed where the default
-    // "just read parent[fieldName]" behavior isn't correct as-is.
-
     createdAt: (parent) => parent.createdAt.toISOString(),
     updatedAt: (parent) => parent.updatedAt.toISOString(),
-    // Mongoose stores these as real JS Date objects. GraphQL's built-in
-    // String type can only serialize actual strings, booleans, or
-    // finite numbers — handing it a raw Date throws a runtime error.
-    // Converting explicitly avoids that.
-
-    // No createdBy resolver yet — that's Milestone 2. See the testing
-    // notes below for exactly what that means right now.
-
-    // No `id` resolver needed at all: Mongoose documents carry a
-    // built-in virtual `id` getter (a string version of `_id`) by
-    // default, so `product.id` already resolves correctly on its own.
 
     createdBy: async (parent) => {
-      if(!parent.createdBy) return null;
-
-
+      if (!parent.createdBy) return null;
       return await User.findById(parent.createdBy);
-    }
+    },
   },
 };
 
