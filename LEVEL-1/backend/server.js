@@ -2,11 +2,11 @@ require('dotenv').config();
 
 require('dns').setServers(['1.1.1.1', '8.8.8.8']);
 
+const context = require('./src/graphql/context')
 const http = require('http');
 const { ApolloServer } = require('@apollo/server');
 const { ApolloServerPluginDrainHttpServer } = require('@apollo/server/plugin/drainHttpServer');
 const { expressMiddleware } = require('@as-integrations/express5');
-// ↑ swap to '@as-integrations/express5' if npm list express showed v5
 
 const app = require('./src/app');
 const connectDB = require('./src/config/db');
@@ -31,7 +31,9 @@ const apolloServer = new ApolloServer({
 
 connectDB().then(async () => {
   await apolloServer.start();
-  app.use('/graphql', expressMiddleware(apolloServer));
+  app.use(
+    '/graphql',
+    expressMiddleware(apolloServer, {context}));
 
   server.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
