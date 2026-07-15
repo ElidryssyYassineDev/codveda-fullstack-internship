@@ -24,7 +24,9 @@ async function context({ req }) {
     }
   }
 
-  return { user };
+  const io = req.app.get('io');
+
+  return { user, io };
 }
 
 module.exports = context;

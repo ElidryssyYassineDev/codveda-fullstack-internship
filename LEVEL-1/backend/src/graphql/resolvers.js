@@ -4,6 +4,17 @@ const User = require('../models/user.model');
 const { requireAdmin } = require('./auth');
 const { signToken } = require('../controllers/auth.controller');
 
+
+function handleMongooseError(err) {
+  if (err.name === 'ValidationError') {
+    const message = Object.values(err.errors).map(e => e.message).join(', ');
+    throw new GraphQLError(message, { extensions: { code: 'BAD_USER_INPUT' } });
+  }
+  throw err;
+  // Anything else (a real server-side failure) rethrows as-is —
+  // this only reshapes the ONE error type that's actually the
+  // client's fault, same instinct as ApiError vs. an uncaught 500.
+}
 const resolvers = {
   Query: {
     products: async () => await Product.find(),
@@ -13,22 +24,34 @@ const resolvers = {
   Mutation: {
     createProduct: async (parent, args, context) => {
       const user = requireAdmin(context);
-      return await Product.create({ ...args, createdBy: user._id });
+      try {
+        const product = await Product.create({...args, createdBy: user._id});
+        context.io.emit('productCreated', product);
+        return product;
+      } catch (error) {
+        handleMongooseError(error);
+      }
     },
 
     updateProduct: async (parent, args, context) => {
       requireAdmin(context);
       const { id, ...updates } = args;
 
-      const product = await Product.findByIdAndUpdate(id, updates, {
-        new: true,
-        runValidators: true,
-      });
-
-      if (!product) {
-        throw new GraphQLError('Product not found', { extensions: { code: 'NOT_FOUND' } });
+      try {
+        const product = await Product.findByIdAndUpdate(id, updates, {
+          new: true,
+          runValidators: true,
+        });
+  
+        if (!product) {
+          throw new GraphQLError('Product not found', { extensions: { code: 'NOT_FOUND' } });
+        }
+        context.io.emit('productUpdated', product);
+        return product;
+        
+      } catch (error) {
+        handleMongooseError(error);
       }
-      return product;
     },
 
     deleteProduct: async (parent, args, context) => {
@@ -38,6 +61,7 @@ const resolvers = {
       if (!product) {
         throw new GraphQLError('Product not found', { extensions: { code: 'NOT_FOUND' } });
       }
+      context.io.emit('productDeleted', product._id);
       return product;
     },
 
@@ -62,7 +86,7 @@ const resolvers = {
             extensions: { code: 'BAD_USER_INPUT' },
           });
         }
-        throw err;
+        handleMongooseError(err);
       }
 
       const token = signToken(user);
