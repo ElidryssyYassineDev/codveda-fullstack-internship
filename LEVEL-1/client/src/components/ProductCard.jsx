@@ -148,7 +148,7 @@ function ProductCard({ product, onEdit, onDelete }) {
 
       <div className="product-card__header">
         <h3 className="product-card__name">{name}</h3>
-        <span className={`product-card__stock-badge ${isOutOfStock ? 'badge--out' : 'badge--in'}`}>
+        <span className={`badge ${isOutOfStock ? 'badge--out': 'badge--in'}`}>
           {isOutOfStock ? 'Out of Stock' : 'In Stock'}
         </span>
       </div>

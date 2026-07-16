@@ -605,3 +605,41 @@ body {
   display: flex; align-items: center; justify-content: center;
   font-family: var(--font-sans); font-weight: 600; font-size: 13px;
 }
+
+/* ── Shared status pill (renamed from product-card__stock-badge) ── */
+.badge {
+  font-size: 0.7rem; font-weight: 600; padding: 0.2rem 0.5rem;
+  border-radius: 999px; white-space: nowrap; text-transform: uppercase; letter-spacing: 0.04em;
+}
+
+/* ── Dashboard ── */
+.dashboard { display: flex; flex-direction: column; gap: 22px; }
+.dashboard__greeting h1 { font-family: var(--font-sans); font-size: 22px; font-weight: 600; letter-spacing: -0.01em; }
+.dashboard__greeting p { color: var(--color-text-muted); font-size: 13px; margin-top: 2px; }
+
+.stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.stat-card { background: var(--color-bg-elevated); border: 1px solid var(--color-border); border-radius: 14px; padding: 16px 18px; box-shadow: var(--shadow-card); }
+.stat-card__label { font-size: 12px; color: var(--color-text-muted); font-weight: 500; display: block; }
+.stat-card__value { font-family: var(--font-mono); font-size: 26px; font-weight: 600; margin-top: 6px; display: block; }
+.stat-card--warn .stat-card__value { color: var(--color-accent); }
+
+.dashboard__row { display: grid; grid-template-columns: 1.5fr 1fr; gap: 14px; }
+.panel { background: var(--color-bg-elevated); border: 1px solid var(--color-border); border-radius: 14px; padding: 18px 20px; box-shadow: var(--shadow-card); }
+.panel h3 { font-family: var(--font-sans); font-size: 14px; font-weight: 600; margin-bottom: 14px; }
+.panel__empty { font-size: 13px; color: var(--color-text-muted); }
+
+.activity-feed { display: flex; flex-direction: column; gap: 12px; }
+.activity-feed__item { display: flex; gap: 10px; align-items: flex-start; }
+.activity-feed__item p { font-size: 13px; }
+.activity-feed__item time { font-family: var(--font-mono); font-size: 11px; color: var(--color-text-muted); }
+.activity-tick { width: 8px; height: 8px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
+.activity-tick--created { background: var(--color-success-text); }
+.activity-tick--updated { background: var(--color-text-muted); }
+.activity-tick--deleted { background: var(--color-danger-text); }
+.activity-tick--lowStock { background: var(--color-accent); }
+
+.section-label { font-family: var(--font-sans); font-size: 14px; font-weight: 600; margin-bottom: 12px; }
+.recent-products { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.recent-product { background: var(--color-bg-elevated); border: 1px solid var(--color-border); border-radius: 14px; padding: 14px 16px; box-shadow: var(--shadow-card); display: flex; flex-direction: column; gap: 6px; }
+.recent-product__name { font-size: 13px; font-weight: 500; }
+.recent-product__price { font-family: var(--font-mono); color: var(--color-accent); font-size: 15px; font-weight: 600; }
