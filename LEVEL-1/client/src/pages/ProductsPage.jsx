@@ -8,8 +8,29 @@ import ProductsToolbar from '../components/ProductsToolbar'
 import ProductTable from '../components/ProductTable'
 import Pagination from '../components/Pagination'
 import ProductFormModal from '../components/ProductFormModal'
+import Skeleton from '../components/Skeleton'
 
 const PAGE_SIZE = 6
+
+function ProductsSkeleton() {
+  return (
+    <div className="products-page">
+      <Skeleton width="120px" height="24px" />
+      <div style={{ marginTop: '4px' }} />
+      <div className="product-table">
+        {[0, 1, 2, 3, 4].map(i => (
+          <div className="skeleton-table-row" key={i}>
+            <Skeleton width="70%" />
+            <Skeleton width="50%" />
+            <Skeleton width="60px" height="20px" radius="999px" />
+            <Skeleton width="50%" />
+            <Skeleton width="70px" height="28px" radius="8px" />
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
 
 function ProductsPage() {
   const { isAdmin } = useAuth()
@@ -73,7 +94,7 @@ function ProductsPage() {
   const totalPages = Math.max(1, Math.ceil(processedProducts.length / PAGE_SIZE))
   const paginatedProducts = processedProducts.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
 
-  if (isLoading) return <LoadingSpinner message="Fetching products..." />
+  if (isLoading) return <ProductsSkeleton />
   if (error) return (
     <div className="status-message status-message--error">
       <p>Something went wrong:</p><code>{error}</code>
