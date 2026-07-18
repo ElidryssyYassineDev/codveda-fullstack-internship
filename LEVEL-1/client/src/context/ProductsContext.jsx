@@ -7,12 +7,14 @@ import { createContext, useState, useContext, useEffect } from 'react'
 import { useAuth } from './AuthContext'
 import { useSocket } from './SocketContext'
 import { authHeaders } from '../utils/authHeaders'
+import { useToast } from './ToastContext'
 
 const ProductsContext = createContext(null)
 
 export function ProductsProvider({ children }) {
   const { token, logout } = useAuth()
   const { socket } = useSocket()
+  const { addToast } = useToast()
 
   const [products, setProducts] = useState([])
   const [isLoading, setIsLoading] = useState(true)
@@ -67,6 +69,7 @@ export function ProductsProvider({ children }) {
 
   function handleProductAdded(newProduct) {
     setProducts(current => [...current, newProduct])
+    addToast(`${newProduct.name} added`, 'success')
   }
 
   async function handleDelete(productId) {
@@ -79,8 +82,10 @@ export function ProductsProvider({ children }) {
       if (!res.ok) throw new Error(`Server error ${res.status}`)
       setProducts(current => current.filter(p => p._id !== productId))
       setDeleteError(null)
+      addToast('Product deleted', 'success')
     } catch (err) {
       setDeleteError('Could not delete product. Check your connection and try again.')
+      addToast('Could not delete product. Check your connection and try again','error')
     }
   }
 
@@ -97,8 +102,11 @@ export function ProductsProvider({ children }) {
       setProducts(current =>
         current.map(p => p._id === productId ? responseData.data : p)
       )
+      addToast('Product updated', 'success')
       return true
+
     } catch (err) {
+      addToast('Could not save changes. Please try again.', 'error')
       return false
     }
   }
