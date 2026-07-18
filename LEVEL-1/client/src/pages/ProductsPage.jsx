@@ -34,7 +34,7 @@ function ProductsSkeleton() {
 
 function ProductsPage() {
   const { isAdmin } = useAuth()
-  const { products, isLoading, error, deleteError, handleDelete } = useProducts()
+  const { products, isLoading, error, handleProductAdded, handleDelete, handleEdit } = useProducts()
 
   const [query, setQuery] = useState('')
   const [filter, setFilter] = useState('all')
@@ -107,12 +107,6 @@ function ProductsPage() {
         <h2 className="product-list__title">Products</h2>
         <span className="product-list__count">{processedProducts.length} of {products.length}</span>
       </div>
-
-      {deleteError && (
-        <div className="status-message status-message--error" style={{ marginBottom: '1rem' }}>
-          {deleteError}
-        </div>
-      )}
 
       <ProductsToolbar query={query} onQueryChange={handleQueryChange} filter={filter} onFilterChange={handleFilterChange} />
 
