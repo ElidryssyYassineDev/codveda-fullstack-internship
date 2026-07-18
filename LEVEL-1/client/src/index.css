@@ -550,12 +550,11 @@ body {
 .modal-backdrop {
   position: fixed; inset: 0; background: rgba(0,0,0,0.45);
   display: flex; align-items: center; justify-content: center; z-index: 300;
-  animation: modal-fade 0.15s ease;
 }
 .modal {
   background: var(--color-bg-elevated); border-radius: 16px; width: 420px;
   max-width: calc(100vw - 32px); max-height: calc(100vh - 64px); overflow-y: auto;
-  box-shadow: var(--shadow-card-hover); animation: modal-pop 0.15s ease;
+  box-shadow: var(--shadow-card-hover);
 }
 .modal__header { display: flex; align-items: center; justify-content: space-between; padding: 18px 20px; border-bottom: 1px solid var(--color-border); }
 .modal__header h3 { font-family: var(--font-sans); font-size: 15px; font-weight: 600; }
@@ -563,9 +562,6 @@ body {
 .modal__close:hover { color: var(--color-text); }
 .modal__body { padding: 20px; }
 .modal__actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 4px; }
-
-@keyframes modal-fade { from { opacity: 0; } to { opacity: 1; } }
-@keyframes modal-pop { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: scale(1); } }
 
 
 /*landing page desing*/
@@ -641,10 +637,10 @@ body {
 
 .landing__ribbon { margin: 56px 0; overflow: hidden; }
 .landing__ribbon-track {
-  display: flex; flex-wrap: wrap; justify-content: center; gap: 0;
+  display: flex; flex-wrap: nowrap; width: max-content; gap: 0;
   background: var(--landing-surface); border-top: 1px solid var(--landing-border);
   border-bottom: 1px solid var(--landing-border); padding: 16px 0;
-  transform: rotate(-1.2deg); margin: 0 -40px;
+  margin: 0 -40px;
 }
 .landing__ribbon-item {
   font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase;
