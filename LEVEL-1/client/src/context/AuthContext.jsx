@@ -2,7 +2,7 @@
 // Provides: token, currentUser, login(), signup(), logout()
 // Any component can read these via useContext(AuthContext)
 
-import { createContext, useState, useContext } from "react";
+import { createContext, useState, useContext, useEffect } from "react";
 
 // Step 1 — create the context object
 // This is the "radio frequency" — Provider broadcasts on it,
@@ -13,6 +13,7 @@ const AuthContext = createContext(null)
 // Wraps the entire app in main.jsx
 // Holds the actual state and functions
 export function AuthProvider ({children}){
+
     const [token, setToken] = useState(
         () => localStorage.getItem('token') || null
         // Lazy initializer — reads token from localStorage on mount.
@@ -31,6 +32,17 @@ export function AuthProvider ({children}){
         }
         //same pattern - persists user object across refreshes.
     )
+
+    const [isAuthLoading, setIsAuthLoading] = useState(true)
+
+    useEffect(() => {
+    // Both lazy initializers above already ran synchronously by the
+    // time this effect fires — so this isn't gating on anything slow
+    // today. It's the seam a real "verify token with the server" check
+    // would slot into later without any consuming component changing.
+    setIsAuthLoading(false)
+    }, [])
+
       // ── login ───────────────────────────────────────────────────────
   // Called after successful POST /api/auth/login or /api/auth/signup.
   // Receives the token and user object from the API response.
@@ -56,7 +68,7 @@ export function AuthProvider ({children}){
   const isAdmin = currentUser?.role === 'admin'
 
   return (
-    <AuthContext.Provider value={{ token, currentUser, isAdmin, login, logout }}>
+    <AuthContext.Provider value={{ token, currentUser, isAdmin, isAuthLoading, login, logout }}>
       {children}
     </AuthContext.Provider>
   )
