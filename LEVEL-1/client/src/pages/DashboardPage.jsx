@@ -8,6 +8,8 @@ import useCountUp from '../hooks/useCountUp'
 import StatCard from '../components/StatCard'
 import RecentProductRow from '../components/RecentProductRow'
 import { motion } from 'framer-motion'
+import Skeleton from '../components/Skeleton'
+
 
 const statsContainer = {
   hidden: {},
