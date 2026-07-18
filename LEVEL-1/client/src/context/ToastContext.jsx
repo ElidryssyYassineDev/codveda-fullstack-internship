@@ -7,7 +7,7 @@
 import { createContext, useState, useContext, useCallback } from 'react'
 
 const ToastContext = createContext(null)
-const DEFAULT_DURATION = 40000
+const DEFAULT_DURATION = 4000
 
 export function ToastProvider({ children }) {
   const [toasts, setToasts] = useState([])

@@ -19,7 +19,7 @@ function ToastViewport() {
               initial={{ opacity: 0, x: 24, scale: 0.95 }}
               animate={{ opacity: 1, x: 0, scale: 1 }}
               exit={{ opacity: 0, x: 24, scale: 0.95 }}
-              transition={{ duration: 2.18, ease: 'easeOut' }}
+              transition={{ duration: 0.18, ease: 'easeOut' }}
             >
               <Icon size={16} />
               <span>{toast.message}</span>

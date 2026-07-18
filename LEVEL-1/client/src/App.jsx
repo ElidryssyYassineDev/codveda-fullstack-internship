@@ -1,3 +1,4 @@
+// client/src/App.jsx
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { useTheme } from './context/ThemeContext'
 import AppShell from './layouts/AppShell'
@@ -8,6 +9,7 @@ import SignupPage from './pages/SignupPage'
 import DashboardPage from './pages/DashboardPage'
 import ProductsPage from './pages/ProductsPage'
 import ProfilePage from './pages/ProfilePage'
+import ToastViewport from './components/ToastViewport'
 
 function App() {
   const { isDarkMode } = useTheme()
@@ -18,18 +20,14 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
-
         <Route element={<ProtectedRoute><AppShell /></ProtectedRoute>}>
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/products" element={<ProductsPage />} />
           <Route path="/profile" element={<ProfilePage />} />
         </Route>
-
-        {/* Was /dashboard — now / makes more sense as "home" for a
-            genuinely unmatched URL, since / itself already knows how
-            to route a logged-in visitor onward correctly. */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
+      <ToastViewport />
     </div>
   )
 }

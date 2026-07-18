@@ -11,6 +11,7 @@ import { ActivityProvider } from './context/ActivityContext.jsx'
 import { ToastProvider } from './context/ToastContext.jsx'
 import ToastViewport from './components/ToastViewport.jsx'
 
+// client/src/main.jsx
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
@@ -21,7 +22,6 @@ createRoot(document.getElementById('root')).render(
               <ProductsProvider>
                 <ActivityProvider>
                   <App />
-                  <ToastViewport />
                 </ActivityProvider>
               </ProductsProvider>
             </ToastProvider>
