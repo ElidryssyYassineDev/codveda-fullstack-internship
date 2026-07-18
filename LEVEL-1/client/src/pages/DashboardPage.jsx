@@ -48,6 +48,36 @@ const currencyFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency', currency: 'USD', notation: 'compact', maximumFractionDigits: 1,
 })
 
+function DashboardSkeleton() {
+  return (
+    <div className="dashboard">
+      <div className="dashboard__greeting">
+        <Skeleton width="240px" height="24px" />
+        <div style={{ marginTop: '8px' }}><Skeleton width="320px" height="14px" /></div>
+      </div>
+
+      <div className="skeleton-stats-row">
+        {[0, 1, 2, 3].map(i => (
+          <div className="skeleton-stat-card" key={i}>
+            <Skeleton width="70%" height="12px" />
+            <Skeleton width="50%" height="26px" />
+          </div>
+        ))}
+      </div>
+
+      <div className="dashboard__row">
+        <div className="panel"><Skeleton width="140px" height="14px" /><div style={{ marginTop: '18px' }}><Skeleton width="100%" height="180px" radius="8px" /></div></div>
+        <div className="panel">
+          <Skeleton width="110px" height="14px" />
+          <div style={{ marginTop: '18px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
+            {[0, 1, 2].map(i => <Skeleton key={i} width="100%" height="13px" />)}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 function DashboardPage() {
   const { currentUser } = useAuth()
   const { isDarkMode } = useTheme()
@@ -89,7 +119,7 @@ function DashboardPage() {
     return [...products].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 3)
   }, [products])
 
-  if (isLoading) return <p>Loading dashboard...</p>
+  if (isLoading) return <DashboardSkeleton />
 
   return (
     <div className="dashboard">
