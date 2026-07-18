@@ -2,6 +2,24 @@
 // Purpose: shared split-screen shell for Login and Signup. children
 // is whichever form (+ toggle link) AuthForms decides to render —
 // this component only owns the visual frame around it.
+import Skeleton from './Skeleton'
+
+export function AuthFieldsSkeleton({ fieldCount = 2 }) {
+  return (
+    <div>
+      <Skeleton width="180px" height="26px" />
+      <div style={{ marginTop: '22px' }}>
+        {Array.from({ length: fieldCount }).map((_, i) => (
+          <div className="skeleton-auth-field" key={i}>
+            <Skeleton width="60px" height="11px" />
+            <Skeleton width="100%" height="42px" radius="12px" />
+          </div>
+        ))}
+        <Skeleton width="100%" height="44px" radius="12px" />
+      </div>
+    </div>
+  )
+}
 
 function TallyMark() {
   return (
