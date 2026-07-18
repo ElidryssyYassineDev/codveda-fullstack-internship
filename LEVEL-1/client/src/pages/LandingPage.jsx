@@ -1,6 +1,7 @@
 import { Link, Navigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { Zap, ShieldCheck, LayoutDashboard } from 'lucide-react'
+import { motion } from 'framer-motion'
 
 function TallyMark() {
   return (
@@ -74,12 +75,17 @@ function LandingPage() {
           </div>
         </section>
 
-        <div className="landing__ribbon">
-          <div className="landing__ribbon-track">
-            {CAPABILITIES.map((cap, i) => (
+         <div className="landing__ribbon">
+          <motion.div
+            className="landing__ribbon-track"
+            style={{ rotate: -1.2 }}
+            animate={{ x: ['0%', '-50%'] }}
+            transition={{ duration: 24, repeat: Infinity, repeatType: 'loop', ease: 'linear' }}
+          >
+            {[...CAPABILITIES, ...CAPABILITIES].map((cap, i) => (
               <span key={i} className="landing__ribbon-item">{cap}</span>
             ))}
-          </div>
+          </motion.div>
         </div>
 
         <section className="landing__features">
