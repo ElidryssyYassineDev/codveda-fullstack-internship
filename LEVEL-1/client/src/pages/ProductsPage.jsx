@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import { Plus } from 'lucide-react'
 import { AnimatePresence } from 'framer-motion'
 import { useAuth } from '../context/AuthContext'
@@ -35,6 +35,7 @@ function ProductsSkeleton() {
 function ProductsPage() {
   const { isAdmin } = useAuth()
   const { products, isLoading, error, handleProductAdded, handleDelete, handleEdit } = useProducts()
+  const searchInputRef = useRef(null)
 
   const [query, setQuery] = useState('')
   const [filter, setFilter] = useState('all')
@@ -44,6 +45,8 @@ function ProductsPage() {
 
   const [editingProduct, setEditingProduct] = useState(null)
   const [isCreating, setIsCreating] = useState(false)
+
+  
 
   function handleSort(key) {
     if (sortBy === key) setSortDirection(prev => prev === 'asc' ? 'desc' : 'asc')
@@ -94,6 +97,30 @@ function ProductsPage() {
   const totalPages = Math.max(1, Math.ceil(processedProducts.length / PAGE_SIZE))
   const paginatedProducts = processedProducts.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
 
+  useEffect(() => {
+    function handleKeyDown(e) {
+      // Guards against hijacking a keystroke while the user is
+      // actually typing somewhere — the exact bug a shortcut that
+      // doesn't check this would have. Also skips while a modal is
+      // open, so "n" while editing a product's name field doesn't
+      // pop a second, unrelated create modal on top of it.
+      const isTyping = ['INPUT', 'TEXTAREA'].includes(e.target.tagName)
+      if (isTyping || isCreating || editingProduct) return
+
+      if (e.key === '/') {
+        e.preventDefault()
+        searchInputRef.current?.focus()
+      }
+      if (e.key === 'n' && isAdmin) {
+        e.preventDefault()
+        setIsCreating(true)
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [isAdmin, isCreating, editingProduct])
+
   if (isLoading) return <ProductsSkeleton />
   if (error) return (
     <div className="status-message status-message--error">
@@ -108,7 +135,7 @@ function ProductsPage() {
         <span className="product-list__count">{processedProducts.length} of {products.length}</span>
       </div>
 
-      <ProductsToolbar query={query} onQueryChange={handleQueryChange} filter={filter} onFilterChange={handleFilterChange} />
+      <ProductsToolbar query={query} onQueryChange={handleQueryChange} filter={filter} onFilterChange={handleFilterChange} searchInputRef={searchInputRef} />
 
       <ProductTable
         products={paginatedProducts}
