@@ -1,19 +1,17 @@
-// client/src/routes/ProtectedRoute.jsx
-// Purpose: gatekeeper for any route requiring a logged-in user.
-// Renders its children if authenticated; otherwise redirects to /login
-// instead of ever rendering the protected content.
-
 import { Navigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 
 function ProtectedRoute({ children }) {
-  const { currentUser } = useAuth()
+  const { currentUser, isAuthLoading } = useAuth()
+
+  if (isAuthLoading) return null
+  // Renders nothing for one tick rather than a full skeleton here —
+  // AppShell's own page-transition wrapper would otherwise animate
+  // in a loading state just to immediately animate it back out again
+  // once isAuthLoading flips, which reads as a flicker, not a loader.
 
   if (!currentUser) {
     return <Navigate to="/login" replace />
-    // replace, not push — this redirect doesn't add a new history entry,
-    // so clicking "back" from /login can't bounce into a redirect loop
-    // back to the page that just kicked the user out.
   }
 
   return children
