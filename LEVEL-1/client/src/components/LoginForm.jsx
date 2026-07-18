@@ -42,7 +42,7 @@ function LoginForm() {
 
   return (
     <form className="add-product-form" onSubmit={handleSubmit}>
-      <h3 className="form__title">Log In</h3>
+      <h3 className="form__title">Welcome back</h3>
 
       {error && <div className="form__error">{error}</div>}
 
