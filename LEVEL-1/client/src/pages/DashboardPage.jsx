@@ -7,6 +7,12 @@ import { useActivity } from '../context/ActivityContext'
 import useCountUp from '../hooks/useCountUp'
 import StatCard from '../components/StatCard'
 import RecentProductRow from '../components/RecentProductRow'
+import { motion } from 'framer-motion'
+
+const statsContainer = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.06 } },
+}
 
 function getGreeting() {
   const hour = new Date().getHours()
@@ -92,12 +98,12 @@ function DashboardPage() {
         <p>Here's what's happening across your inventory.</p>
       </div>
 
-      <div className="stats-row">
+      <motion.div className="stats-row" variants={statsContainer} initial="hidden" animate="show">
         <StatCard label="Total products" value={animatedTotal} />
         <StatCard label="In stock" value={`${animatedInStockPercent}%`} />
         <StatCard label="Out of stock" value={animatedOutOfStock} warn={stats.outOfStockCount > 0} />
         <StatCard label="Inventory value" value={currencyFormatter.format(stats.inventoryValue)} />
-      </div>
+      </motion.div>
 
       <div className="dashboard__row">
         <div className="panel">
