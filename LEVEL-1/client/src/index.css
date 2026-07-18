@@ -360,29 +360,6 @@ body {
   letter-spacing: 0.04em;
 }
 
-/* ── Auth page wrapper ── */
-.auth-page {
-  max-width: 400px;
-  margin: 0 auto 2.5rem;
-}
-
-.auth-toggle {
-  text-align: center;
-  margin-top: 1rem;
-  font-size: 0.85rem;
-  color: var(--color-text-muted);
-}
-
-.auth-toggle button {
-  background: none;
-  border: none;
-  color: var(--color-accent);
-  font-weight: 600;
-  cursor: pointer;
-  text-decoration: underline;
-  font-size: inherit;
-  padding: 0;
-}
 
 /* ── Navbar user info ── */
 .navbar__user {
@@ -686,4 +663,66 @@ body {
   .landing__chip { display: none; }
   .landing__features { grid-template-columns: 1fr; }
   .landing__cta { flex-direction: column; width: 100%; max-width: 280px; }
+}
+
+/* ── Auth layout (Login / Signup) ── */
+.auth-layout {
+  --auth-bg: #120F0C;
+  --auth-glow: radial-gradient(ellipse 700px 550px at 78% 15%, rgba(245,158,11,0.14), transparent 65%);
+  --auth-card-bg: rgba(30,25,19,0.6);
+  --auth-card-border: rgba(245,241,232,0.10);
+  --auth-text: #F5F1E8;
+  --auth-muted: #9C948A;
+  --auth-accent: #F5A623;
+
+  min-height: 100vh;
+  background: var(--auth-bg) var(--auth-glow);
+  display: flex;
+  color: var(--auth-text);
+  font-family: var(--font-body);
+}
+
+.auth-layout__card-col { flex: 0 0 44%; display: flex; align-items: center; justify-content: center; padding: 40px 24px; }
+
+.auth-layout__card {
+  width: 100%; max-width: 380px;
+  background: var(--auth-card-bg); border: 1px solid var(--auth-card-border); border-radius: 20px;
+  padding: 36px 32px; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4); animation: auth-card-in 0.4s ease;
+}
+@keyframes auth-card-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+.auth-layout__logo { display: flex; align-items: center; gap: 8px; font-family: var(--font-sans); font-weight: 700; font-size: 16px; margin-bottom: 28px; }
+
+/* Neutralizes AddProductForm-era box styling still present on
+   LoginForm/SignupForm's <form> element — prevents a card nested
+   inside this card. The glass card is the only visible container now. */
+.auth-layout__card .add-product-form { background: none; border: none; box-shadow: none; padding: 0; margin-bottom: 0; }
+
+.auth-layout__card .form__title { font-family: var(--font-sans); font-size: 26px; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 22px; color: var(--auth-text); }
+.auth-layout__card .form__label { color: var(--auth-muted); font-family: var(--font-mono); font-size: 11px; }
+.auth-layout__card .form__input { background: rgba(255,255,255,0.04); border: 1px solid rgba(245,241,232,0.14); color: var(--auth-text); padding: 0.7rem 0.9rem; border-radius: 12px; }
+.auth-layout__card .form__input::placeholder { color: rgba(245,241,232,0.3); }
+.auth-layout__card .form__input:focus { border-color: var(--auth-accent); box-shadow: 0 0 0 3px rgba(245,166,35,0.18); }
+.auth-layout__card .form__error { background: rgba(224,102,93,0.12); color: #E0665D; border: 1px solid rgba(224,102,93,0.25); }
+.auth-layout__card .btn--primary { background: var(--auth-accent); color: #1A1000; border-radius: 12px; padding: 0.75rem; font-size: 14px; font-weight: 700; }
+.auth-layout__card .btn--primary:hover:not(:disabled) { transform: translateY(-1px); }
+
+.auth-toggle { text-align: center; margin-top: 18px; font-size: 13px; color: var(--auth-muted); }
+.auth-toggle a { color: var(--auth-accent); font-weight: 600; text-decoration: none; }
+.auth-toggle a:hover { text-decoration: underline; }
+
+.auth-layout__brand-col { flex: 1; position: relative; display: flex; flex-direction: column; justify-content: center; padding: 60px 80px; overflow: hidden; }
+.auth-layout__brand-col h2 { font-family: var(--font-sans); font-size: 38px; font-weight: 700; line-height: 1.15; letter-spacing: -0.015em; max-width: 420px; }
+.auth-layout__brand-col p { margin-top: 14px; color: var(--auth-muted); max-width: 380px; font-size: 15px; line-height: 1.6; }
+
+.auth-chip { position: absolute; display: flex; align-items: center; gap: 7px; background: rgba(30,25,19,0.7); border: 1px solid var(--auth-card-border); border-radius: 999px; padding: 7px 14px; font-size: 12px; font-weight: 500; box-shadow: 0 8px 24px rgba(0,0,0,0.35); backdrop-filter: blur(8px); }
+.auth-chip--a { top: 18%; right: 14%; transform: rotate(-5deg); }
+.auth-chip--b { top: 32%; right: 30%; transform: rotate(4deg); }
+.auth-chip__tick { width: 7px; height: 7px; border-radius: 50%; background: #3F8A6C; }
+.auth-chip__tick--warn { background: var(--auth-accent); }
+
+@media (max-width: 900px) {
+  .auth-layout__brand-col { display: none; }
+  .auth-layout__card-col { flex: 1; }
 }
