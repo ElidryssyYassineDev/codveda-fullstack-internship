@@ -45,7 +45,7 @@ function SignupForm() {
 
   return (
     <form className="add-product-form" onSubmit={handleSubmit}>
-      <h3 className="form__title">Sign Up</h3>
+      <h3 className="form__title">Create your account</h3>
 
       {error && <div className="form__error">{error}</div>}
 
