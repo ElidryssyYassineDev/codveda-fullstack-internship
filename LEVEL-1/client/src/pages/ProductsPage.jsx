@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react'
 import { Plus } from 'lucide-react'
+import { AnimatePresence } from 'framer-motion'
 import { useAuth } from '../context/AuthContext'
 import { useProducts } from '../context/ProductsContext'
 import LoadingSpinner from '../components/LoadingSpinner'
@@ -108,9 +109,13 @@ function ProductsPage() {
           <Plus size={22} />
         </button>
       )}
-
-      {isCreating && <ProductFormModal onClose={() => setIsCreating(false)} />}
-      {editingProduct && <ProductFormModal product={editingProduct} onClose={() => setEditingProduct(null)} />}
+       <AnimatePresence>
+        {isCreating && <ProductFormModal onClose={() => setIsCreating(false)} />}
+      </AnimatePresence>
+      <AnimatePresence>
+        {editingProduct && <ProductFormModal product={editingProduct} onClose={() => setEditingProduct(null)} />}
+      </AnimatePresence>
+      
     </div>
   )
 }
