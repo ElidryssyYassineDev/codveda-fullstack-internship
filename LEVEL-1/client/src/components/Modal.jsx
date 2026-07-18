@@ -1,10 +1,5 @@
-// client/src/components/Modal.jsx
-// Purpose: reusable modal shell. Escape key and backdrop click both
-// close it — the cleanup function here is doing real work, same
-// principle as every socket listener cleanup: an effect that adds a
-// listener must remove it, or it leaks past the moment it's needed.
-
 import { useEffect } from 'react'
+import { motion } from 'framer-motion'
 import { X } from 'lucide-react'
 
 function Modal({ title, onClose, children }) {
@@ -14,7 +9,6 @@ function Modal({ title, onClose, children }) {
     }
     document.addEventListener('keydown', handleKeyDown)
     document.body.style.overflow = 'hidden'
-
     return () => {
       document.removeEventListener('keydown', handleKeyDown)
       document.body.style.overflow = ''
@@ -22,11 +16,22 @@ function Modal({ title, onClose, children }) {
   }, [onClose])
 
   return (
-    <div className="modal-backdrop" onClick={onClose}>
-      {/* stopPropagation is the one genuinely new trick here — without
-          it, a click anywhere INSIDE the modal bubbles up to the
-          backdrop's own onClick and closes it immediately. */}
-      <div className="modal" onClick={e => e.stopPropagation()}>
+    <motion.div
+      className="modal-backdrop"
+      onClick={onClose}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.15 }}
+    >
+      <motion.div
+        className="modal"
+        onClick={e => e.stopPropagation()}
+        initial={{ opacity: 0, scale: 0.96, y: 8 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.96, y: 8 }}
+        transition={{ duration: 0.15, ease: 'easeOut' }}
+      >
         <div className="modal__header">
           <h3>{title}</h3>
           <button className="modal__close" onClick={onClose} aria-label="Close">
@@ -34,8 +39,8 @@ function Modal({ title, onClose, children }) {
           </button>
         </div>
         <div className="modal__body">{children}</div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   )
 }
 
