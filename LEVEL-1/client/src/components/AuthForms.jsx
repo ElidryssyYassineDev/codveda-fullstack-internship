@@ -1,37 +1,20 @@
-// client/src/components/AuthForms.jsx
-// Purpose: Toggles between LoginForm and SignupForm.
-// "mode" state lives HERE — this is the Q2 answer in code.
-// Nothing outside this component tree needs to know which form is showing.
-
-import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import LoginForm from './LoginForm'
 import SignupForm from './SignupForm'
+import AuthLayout from './AuthLayout'
 
-function AuthForms() {
-  const [mode, setMode] = useState('login')  // 'login' | 'signup'
-
+function AuthForms({ mode }) {
   return (
-    <div className="auth-page">
+    <AuthLayout>
       {mode === 'login' ? <LoginForm /> : <SignupForm />}
-
       <p className="auth-toggle">
         {mode === 'login' ? (
-          <>
-            Don't have an account?{' '}
-            <button type="button" onClick={() => setMode('signup')}>
-              Sign up
-            </button>
-          </>
+          <>Don't have an account? <Link to="/signup">Sign up</Link></>
         ) : (
-          <>
-            Already have an account?{' '}
-            <button type="button" onClick={() => setMode('login')}>
-              Log in
-            </button>
-          </>
+          <>Already have an account? <Link to="/login">Log in</Link></>
         )}
       </p>
-    </div>
+    </AuthLayout>
   )
 }
 
