@@ -790,3 +790,57 @@ body {
 .profile-session-row:last-of-type { border-bottom: none; }
 .profile-theme-btn { display: inline-flex; align-items: center; gap: 6px; }
 .profile-logout-btn { display: inline-flex; align-items: center; gap: 6px; width: 100%; justify-content: center; margin-top: 14px; }
+
+/* ── Skip link ── */
+.skip-link {
+  position: absolute; top: -100px; left: 16px; z-index: 500;
+  background: var(--color-accent); color: #1A1000;
+  padding: 10px 16px; border-radius: 8px; font-size: 13px; font-weight: 600;
+  text-decoration: none; transition: top 0.15s ease;
+}
+.skip-link:focus { top: 16px; }
+
+/* ============================================================
+   RESPONSIVE — authenticated app shell
+   Landing and Auth already have their own breakpoints above this.
+   ============================================================ */
+
+@media (max-width: 900px) {
+  .sidebar { display: none; }
+
+  .mobile-nav {
+    display: flex;
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 150;
+    background: var(--color-sidebar-bg);
+    border-top: 1px solid rgba(242,237,228,0.08);
+    padding: 6px 0 max(6px, env(safe-area-inset-bottom));
+  }
+  .mobile-nav a {
+    flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px;
+    padding: 6px 0; color: rgba(242,237,228,0.5); text-decoration: none;
+    font-size: 10px; font-weight: 500;
+  }
+  .mobile-nav a.active { color: #F5C878; }
+
+  .page-content { padding: 20px 16px 84px; }
+  .topbar { padding: 0 16px; }
+  .topbar .connection-status__label { display: none; }
+
+  .stats-row { grid-template-columns: repeat(2, 1fr); }
+  .dashboard__row { grid-template-columns: 1fr; }
+  .recent-products { grid-template-columns: repeat(2, 1fr); }
+
+  .products-toolbar { flex-direction: column; align-items: stretch; }
+  .products-toolbar__search { max-width: none; }
+
+  .product-table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .product-table { min-width: 640px; }
+
+  .fab { bottom: 84px; }
+}
+
+@media (max-width: 520px) {
+  .stats-row { grid-template-columns: 1fr; }
+  .recent-products { grid-template-columns: 1fr; }
+  .profile-header { flex-direction: column; align-items: flex-start; text-align: left; }
+}
