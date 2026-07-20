@@ -1,6 +1,9 @@
+// client/src/layouts/AppShell.jsx
+
 import { Outlet, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import Sidebar from '../components/Sidebar'
+import MobileNav from '../components/MobileNav'
 import Topbar from '../components/Topbar'
 import LowStockAlert from '../components/LowStockAlert'
 
@@ -9,14 +12,17 @@ function AppShell() {
 
   return (
     <div className="app-shell">
+      {/* Invisible until focused — a keyboard user's first Tab press
+          lets them jump straight past the nav to page content. */}
+      <a href="#main-content" className="skip-link">Skip to content</a>
+
       <Sidebar />
+      <MobileNav />
+
       <main className="main-area">
         <Topbar />
-        <div className="page-content">
+        <div className="page-content" id="main-content" tabIndex={-1}>
           <LowStockAlert />
-          {/* mode="wait": the leaving page's exit finishes completely
-              before the next page enters — a clean handoff rather than
-              both fading over each other at once. */}
           <AnimatePresence mode="wait">
             <motion.div
               key={location.pathname}
