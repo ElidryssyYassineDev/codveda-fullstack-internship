@@ -14,7 +14,7 @@ function Topbar() {
     <header className="topbar">
       <div className={`connection-status ${isConnected ? 'connection-status--live' : 'connection-status--offline'}`}>
         <span className="connection-status__dot" />
-        {isConnected ? 'Live' : 'Reconnecting…'}
+        <span className="connection-status__label">{isConnected ? 'Live' : 'Reconnecting…'}</span>
       </div>
 
       <div className="topbar__actions">
