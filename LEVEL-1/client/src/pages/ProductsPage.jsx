@@ -137,12 +137,15 @@ function ProductsPage() {
 
       <ProductsToolbar query={query} onQueryChange={handleQueryChange} filter={filter} onFilterChange={handleFilterChange} searchInputRef={searchInputRef} />
 
+            <div className="product-table-wrapper">
       <ProductTable
-        products={paginatedProducts}
-        sortBy={sortBy} sortDirection={sortDirection} onSort={handleSort}
-        onEdit={setEditingProduct} onDelete={handleDeleteClick}
-        isAdmin={isAdmin}
+          products={paginatedProducts}
+          sortBy={sortBy} sortDirection={sortDirection} onSort={handleSort}
+          onEdit={setEditingProduct} onDelete={handleDeleteClick}
+          isAdmin={isAdmin}
       />
+      </div>
+
 
       <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
 
