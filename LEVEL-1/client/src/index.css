@@ -804,7 +804,7 @@ body {
    RESPONSIVE — authenticated app shell
    Landing and Auth already have their own breakpoints above this.
    ============================================================ */
-
+  .mobile-nav {display: none;}
 @media (max-width: 900px) {
   .sidebar { display: none; }
 
