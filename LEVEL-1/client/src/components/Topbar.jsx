@@ -3,28 +3,19 @@
 import { Bell, Sun, Moon } from 'lucide-react'
 import { useTheme } from '../context/ThemeContext'
 import { useAuth } from '../context/AuthContext'
+import { useSocket } from '../context/SocketContext'
 
-function Topbar({ searchValue, onSearchChange }) {
+function Topbar() {
   const { isDarkMode, toggleTheme } = useTheme()
   const { currentUser } = useAuth()
+  const { isConnected } = useSocket()
 
   return (
     <header className="topbar">
-      {/* Renders only where a page actually passes search props in.
-          Dashboard passes nothing, so this whole block is simply
-          absent there — not disabled, not empty, just not rendered. */}
-      {onSearchChange ? (
-        <div className="topbar__search">
-          <input
-            type="text"
-            placeholder="Search products..."
-            value={searchValue}
-            onChange={e => onSearchChange(e.target.value)}
-          />
-        </div>
-      ) : (
-        <div />
-      )}
+      <div className={`connection-status ${isConnected ? 'connection-status--live' : 'connection-status--offline'}`}>
+        <span className="connection-status__dot" />
+        {isConnected ? 'Live' : 'Reconnecting…'}
+      </div>
 
       <div className="topbar__actions">
         <button className="topbar__icon-btn" aria-label="Notifications">
