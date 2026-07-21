@@ -10,7 +10,7 @@ const User = require('../models/user.model');
 function initSocket(httpServer, app) {
   const io = new Server(httpServer, {
     cors: {
-      origin: '*', // dev only — same permissiveness as app.use(cors()) in app.js
+      origin: 'process.env.FRONTEND_URL' || 'http://localhost:5173', // dev only — same permissiveness as app.use(cors()) in app.js
     },
   });
 

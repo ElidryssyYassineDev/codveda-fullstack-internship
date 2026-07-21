@@ -6,7 +6,11 @@ const errorHandler = require('./middlewares/errorHandler');
 
 const app = express();
 
-app.use(cors());
+const allowedOrigins = [
+  process.env.FRONTEND_URL || 'http://localhost:5173','https://studio.apollographql.com',
+];
+app.use(cors({origin: allowedOrigins}));
+
 app.use(express.json());
 
 app.get('/api/health', (req, res) => {
