@@ -1,6 +1,8 @@
 require('dotenv').config();
 
-require('dns').setServers(['1.1.1.1', '8.8.8.8']);
+if(process.platform === 'win32'){
+  require('dns').setServers(['1.1.1.1', '8.8.8.8']);
+}
 
 const context = require('./src/graphql/context')
 const http = require('http');
