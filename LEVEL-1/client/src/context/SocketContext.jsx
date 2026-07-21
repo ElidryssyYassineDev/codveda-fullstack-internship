@@ -20,7 +20,7 @@ export function SocketProvider({ children }) {
       return
     }
 
-    const newSocket = io(import.meta.env.VITE_SOCKET_URL, {
+    const newSocket = io(import.meta.env.VITE_API_URL, {
       auth: { token },
     })
 
