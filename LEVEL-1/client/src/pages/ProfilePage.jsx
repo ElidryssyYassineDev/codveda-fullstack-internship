@@ -8,6 +8,7 @@ import { useSocket } from '../context/SocketContext'
 import { useTheme } from '../context/ThemeContext'
 import Skeleton from '../components/Skeleton'
 import RecentProductRow from '../components/RecentProductRow'
+import { API_BASE_URL } from '../utils/apiBase'
 
 function formatMemberSince(dateString) {
   return new Date(dateString).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
@@ -28,7 +29,7 @@ function ProfilePage() {
   useEffect(() => {
     async function fetchFullProfile() {
       try {
-        const res = await fetch('/api/auth/me', {
+        const res = await fetch(`${API_BASE_URL}/api/auth/me`, {
           headers: { Authorization: `Bearer ${token}` },
         })
         if (res.ok) {

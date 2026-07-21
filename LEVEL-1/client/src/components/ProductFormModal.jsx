@@ -11,6 +11,7 @@ import { useAuth } from '../context/AuthContext'
 import { useProducts } from '../context/ProductsContext'
 import { authHeaders } from '../utils/authHeaders'
 import Modal from './Modal'
+import { API_BASE_URL } from '../utils/apiBase'
 
 function ProductFormModal({ product, onClose }) {
   const { token } = useAuth()
@@ -54,7 +55,7 @@ function ProductFormModal({ product, onClose }) {
     }
 
     try {
-      const res = await fetch('/api/products', {
+      const res = await fetch(`${API_BASE_URL}/api/products`, {
         method: 'POST',
         headers: authHeaders(token),
         body: JSON.stringify(payload),

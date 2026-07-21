@@ -8,6 +8,8 @@ import { useAuth } from './AuthContext'
 import { useSocket } from './SocketContext'
 import { authHeaders } from '../utils/authHeaders'
 import { useToast } from './ToastContext'
+import { API_BASE_URL } from '../utils/apiBase'
+
 
 const ProductsContext = createContext(null)
 
@@ -24,7 +26,7 @@ export function ProductsProvider({ children }) {
   useEffect(() => {
     async function fetchProducts() {
       try {
-        const res = await fetch('/api/products')
+        const res = await fetch(`${API_BASE_URL}/api/products`)
         if (!res.ok) throw new Error(`Server responded with status ${res.status}`)
         const responseData = await res.json()
         setProducts(responseData.data)
@@ -74,7 +76,7 @@ export function ProductsProvider({ children }) {
 
   async function handleDelete(productId) {
     try {
-      const res = await fetch(`/api/products/${productId}`, {
+      const res = await fetch(`${API_BASE_URL}/api/products/${productId}`, {
         method: 'DELETE',
         headers: authHeaders(token),
       })
@@ -91,7 +93,7 @@ export function ProductsProvider({ children }) {
 
   async function handleEdit(productId, updatedData) {
     try {
-      const res = await fetch(`/api/products/${productId}`, {
+      const res = await fetch(`${API_BASE_URL}/api/products/${productId}`, {
         method: 'PUT',
         headers: authHeaders(token),
         body: JSON.stringify(updatedData),

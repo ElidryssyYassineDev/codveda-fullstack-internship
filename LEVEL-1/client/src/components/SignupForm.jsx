@@ -6,6 +6,7 @@
 
 import { useState } from 'react'
 import { useAuth } from '../context/AuthContext'
+import { API_BASE_URL } from '../utils/apiBase'
 
 function SignupForm() {
   const { login } = useAuth()
@@ -22,7 +23,7 @@ function SignupForm() {
     setIsSubmitting(true)
 
     try {
-      const res = await fetch('/api/auth/signup', {
+      const res = await fetch(`${API_BASE_URL}/api/auth/signup`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, password }),
