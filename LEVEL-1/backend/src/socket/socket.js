@@ -2,7 +2,7 @@
 // Purpose: Attaches Socket.io to the shared HTTP server. Verifies the
 // JWT once at connection time — same trust model as `protect`, just
 // running at handshake instead of on every request (Phase 2, Section C).
-
+require ('dotenv').config();
 const { Server } = require('socket.io');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user.model');
@@ -10,7 +10,7 @@ const User = require('../models/user.model');
 function initSocket(httpServer, app) {
   const io = new Server(httpServer, {
     cors: {
-      origin: 'process.env.FRONTEND_URL' || 'http://localhost:5173', // dev only — same permissiveness as app.use(cors()) in app.js
+      origin: process.env.FRONTEND_URL || 'http://localhost:5173', // dev only — same permissiveness as app.use(cors()) in app.js
     },
   });
 
